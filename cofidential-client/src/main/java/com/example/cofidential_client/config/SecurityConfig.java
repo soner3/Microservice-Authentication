@@ -38,7 +38,7 @@ public class SecurityConfig {
                 http
                                 .authorizeExchange(exchange -> exchange
                                                 .pathMatchers("/app/**").hasRole("Ressources")
-                                                .anyExchange().permitAll())
+                                                .anyExchange().authenticated())
                                 .csrf(CsrfSpec::disable)
                                 .addFilterBefore(new CookieToAuthorizationHeaderFilter(),
                                                 SecurityWebFiltersOrder.AUTHENTICATION)
