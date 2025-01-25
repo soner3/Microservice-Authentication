@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: cofidential-client
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak-oidc:
+            provider: keycloak
+            client-id: oauth-client
+            client-secret: SfqIgizcTNYHLC7g3ryWkMUshpPt4yp9
+            authorization-grant-type: authorization_code
+            scope: openid,profile,email
+        provider:
+          keycloak:
+            issuer-uri: "http://localhost:9090/realms/oauthrealm"
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:9090/realms/oauthrealm/protocol/openid-connect/certs
+server:
+  port: 8080
