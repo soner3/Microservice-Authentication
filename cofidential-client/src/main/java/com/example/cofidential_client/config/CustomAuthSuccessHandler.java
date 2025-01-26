@@ -18,7 +18,6 @@ public class CustomAuthSuccessHandler extends RedirectServerAuthenticationSucces
 
         private final ServerOAuth2AuthorizedClientRepository authorizedClientRepository;
         private final String ACCESS_COOKIE_NAME = "access_token";
-        private final String REFRESH_COOKIE_NAME = "refresh_token";
         private final String CLIENT_ID = "keycloak-oidc";
 
         @Override
@@ -30,33 +29,12 @@ public class CustomAuthSuccessHandler extends RedirectServerAuthenticationSucces
                                 webFilterExchange.getExchange())
                                 .flatMap(authorizedClient -> {
                                         String accessToken = authorizedClient.getAccessToken().getTokenValue();
-                                        String refreshToken = authorizedClient.getRefreshToken() != null
-                                                        ? authorizedClient.getRefreshToken().getTokenValue()
-                                                        : null;
                                         Instant accessTokenExpiry = authorizedClient.getAccessToken().getExpiresAt();
-                                        long accessMaxAge = accessTokenExpiry != null
-                                                        ? accessTokenExpiry.getEpochSecond()
-                                                                        - Instant.now().getEpochSecond()
-                                                        : 3600;
+                                        long accessMaxAge = accessTokenExpiry.getEpochSecond()
+                                                        - Instant.now().getEpochSecond();
 
                                         ResponseCookie accessTokenCookie = createResponseCookie(ACCESS_COOKIE_NAME,
                                                         accessToken, accessMaxAge);
-
-                                        if (refreshToken != null) {
-
-                                                Instant refreshExpiry = authorizedClient.getRefreshToken()
-                                                                .getExpiresAt();
-                                                long refreshMaxAge = refreshExpiry != null
-                                                                ? refreshExpiry.getEpochSecond()
-                                                                                - Instant.now().getEpochSecond()
-                                                                : 86400;
-
-                                                ResponseCookie refreshTokenCookie = createResponseCookie(
-                                                                REFRESH_COOKIE_NAME, refreshToken, refreshMaxAge);
-
-                                                webFilterExchange.getExchange().getResponse()
-                                                                .addCookie(refreshTokenCookie);
-                                        }
 
                                         webFilterExchange.getExchange().getResponse().addCookie(accessTokenCookie);
 

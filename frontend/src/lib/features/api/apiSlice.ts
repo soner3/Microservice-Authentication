@@ -37,7 +37,7 @@ const baseQueryWithReauth: BaseQueryFn<
           api,
           extraOptions
         );
-        if (refreshResult) {
+        if (refreshResult.meta?.response?.status === 200) {
           result = await baseQuery(args, api, extraOptions);
         } else {
           // Logout logic

@@ -8,7 +8,7 @@ spring:
           keycloak-oidc:
             provider: keycloak
             client-id: oauth-client
-            client-secret: myFRladaadM1jGn6lZLzeKQzTyunqKY0
+            client-secret: ABak6HfOLC36AkfqhlIa2B35XjbQyaOC
             authorization-grant-type: authorization_code
             scope: openid,profile,email
         provider:
