@@ -1,3 +1,5 @@
+import RefreshService from "@/components/RefreshService";
+import AuthProvider from "./AuthProvider";
 import "./globals.css";
 import StoreProvider from "./StoreProvider";
 
@@ -9,7 +11,12 @@ export default function RootLayout({
   return (
     <html lang="de">
       <body>
-        <StoreProvider>{children}</StoreProvider>
+        <AuthProvider>
+          <StoreProvider>
+            <RefreshService />
+            {children}
+          </StoreProvider>
+        </AuthProvider>
       </body>
     </html>
   );

@@ -1,4 +1,4 @@
-package com.example.cofidential_client;
+package com.example.gatewayserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,10 +7,10 @@ import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class CofidentialClientApplication {
+public class GatewayServerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CofidentialClientApplication.class, args);
+		SpringApplication.run(GatewayServerApplication.class, args);
 	}
 
 	@Bean

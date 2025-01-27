@@ -1,4 +1,4 @@
 rootProject.name = 'Fullstack-Test'
 
-include 'cofidential-client'
+include 'gatewayserver'
 include 'ressource-server'

@@ -1,4 +1,4 @@
-package com.example.cofidential_client.config;
+package com.example.gatewayserver.config;
 
 import java.util.ArrayList;
 import java.util.Collection;
