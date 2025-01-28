@@ -18,6 +18,9 @@ export default function Message() {
           {"Something went wrong. Please try again."}
         </p>
       )}
+      <button className="text-white px-4 py-2 bg-blue-600 rounded-md shadow-md m-2 transition-all hover:scale-105 active:scale-95 duration-200">
+        Get Message
+      </button>
     </>
   );
 }

@@ -1,12 +1,10 @@
 import { listeneMiddleware } from "@/app/listenerMiddleware";
 import { configureStore } from "@reduxjs/toolkit";
 import { apiSlice } from "./features/api/apiSlice";
-import { tokenSlice } from "./features/tokenSlice";
 
 export const makestore = () => {
   return configureStore({
     reducer: {
-      tokenReducer: tokenSlice.reducer,
       [apiSlice.reducerPath]: apiSlice.reducer,
     },
     middleware: (getDefaultMiddleware) =>

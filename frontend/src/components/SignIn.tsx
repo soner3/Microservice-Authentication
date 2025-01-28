@@ -1,32 +1,28 @@
 "use client";
 
-import { signIn, signOut, useSession } from "next-auth/react";
+import { keycloak } from "./KeyCloakContext";
 import Message from "./Message";
 
 export default function SignIn() {
-  const { data: session } = useSession();
-
-  return (
-    <div>
-      {!session && (
+  if (keycloak.authenticated) {
+    return (
+      <>
+        <Message />
         <button
-          className="text-white px-4 py-2 bg-green-600 rounded-md shadow-md m-2 transition-all hover:scale-105 active:scale-95 duration-200"
-          onClick={() => signIn("keycloak")}
+          onClick={() => keycloak.logout()}
+          className="text-white px-4 py-2 bg-red-600 rounded-md shadow-md m-2 transition-all hover:scale-105 active:scale-95 duration-200"
         >
-          Sign In
+          Sign Out
         </button>
-      )}
-      {session && (
-        <>
-          <Message />
-          <button
-            className="text-white px-4 py-2 bg-red-600 rounded-md shadow-md m-2 transition-all hover:scale-105 active:scale-95 duration-200"
-            onClick={() => signOut()}
-          >
-            Sign Out
-          </button>
-        </>
-      )}
-    </div>
+      </>
+    );
+  }
+  return (
+    <button
+      onClick={() => keycloak.login()}
+      className="text-white px-4 py-2 bg-green-600 rounded-md shadow-md m-2 transition-all hover:scale-105 active:scale-95 duration-200"
+    >
+      Sign In
+    </button>
   );
 }

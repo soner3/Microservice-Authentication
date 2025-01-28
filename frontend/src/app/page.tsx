@@ -1,16 +1,14 @@
-"use client";
+export const metadata: Metadata = {
+  title: "Website",
+};
 
 import SignIn from "@/components/SignIn";
-import { useSession } from "next-auth/react";
+import { Metadata } from "next";
 
 export default function Home() {
-  const { data: session } = useSession();
-
   return (
     <div className="p-4">
       <SignIn />
-      {session && <h2>Access: {session.accessToken}</h2>}
-      {session && <h2>Refresh: {session.refreshToken}</h2>}
     </div>
   );
 }

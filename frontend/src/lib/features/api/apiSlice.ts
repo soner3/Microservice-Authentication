@@ -1,5 +1,5 @@
-import { RootState } from "@/lib/store";
 import { MessageDto } from "@/app/interfaces";
+import { keycloak } from "@/components/KeyCloakContext";
 import {
   BaseQueryFn,
   createApi,
@@ -8,19 +8,15 @@ import {
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query/react";
 import { Mutex } from "async-mutex";
-import { RefreshResponseDto } from "@/lib/refreshTokenObjects";
-import { processRefreshResponseDto } from "../tokenSlice";
 
 const mutex = new Mutex();
 export const baseQuery = fetchBaseQuery({
   baseUrl: "http://localhost:8080",
   credentials: "include",
-  prepareHeaders: (headers, { getState, endpoint }) => {
-    const accessToken = (getState() as RootState).tokenReducer.accessToken;
+
+  prepareHeaders: async (headers) => {
     headers.set("Content-Type", "application/json");
-    if (endpoint !== "/api/auth/refresh") {
-      headers.set("Authorization", `Bearer ${accessToken}`);
-    }
+    headers.set("Authorization", `Bearer ${keycloak.token}`);
   },
 });
 
@@ -37,31 +33,16 @@ const baseQueryWithReauth: BaseQueryFn<
   ) {
     if (!mutex.isLocked()) {
       const release = await mutex.acquire();
-      const state = api.getState() as RootState;
-      const token = JSON.stringify(state.tokenReducer.refreshToken);
 
       try {
-        const refreshResult = await baseQuery(
-          {
-            url: "/api/auth/refresh",
-            method: "POST",
-            mode: "no-cors",
-            credentials: "include",
-            body: token,
-          },
-          api,
-          extraOptions
-        );
-
-        if (refreshResult.meta?.response?.ok) {
-          api.dispatch(
-            processRefreshResponseDto(refreshResult.data as RefreshResponseDto)
-          );
+        const refreshed = await keycloak.updateToken();
+        console.log("Refreshed Status" + refreshed);
+        if (refreshed) {
           console.log("Refresh Successfull");
 
           result = await baseQuery(args, api, extraOptions);
         } else {
-          console.log("Refresh Failed");
+          keycloak.logout();
         }
       } finally {
         release();
